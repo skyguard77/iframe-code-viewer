@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        textarea, button {
+            width: 80%;
+            max-width: 600px;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        iframe {
+            margin-top: 20px;
+            width: 80%;
+            max-width: 600px;
+            height: 400px;
+            border: none;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>YouTube Video Viewer</h1>
+    <p>Paste a valid YouTube URL below to view the video:</p>
+    <textarea id="urlInput" rows="2" placeholder="Paste YouTube URL here (e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ)"></textarea><br>
+    <button onclick="displayVideo()">View Video</button>
+    <div id="videoContainer"></div>
+    <p id="errorMessage" class="error"></p>
+
+    <script>
+        function displayVideo() {
+            const input = document.getElementById('urlInput').value.trim();
+            const videoContainer = document.getElementById('videoContainer');
+            const errorMessage = document.getElementById('errorMessage');
+            videoContainer.innerHTML = ''; // Clear any previous content
+            errorMessage.textContent = ''; // Clear any previous errors
+
+            try {
+                // Validate input as a YouTube URL
+                const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]{11}(.*)?$/;
+                if (youtubeRegex.test(input)) {
+                    // Extract YouTube video ID and embed it
+                    const videoId = input.match(/(?:v=|youtu\.be\/)([\w-]{11})/)[1];
+                    videoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${encodeURIComponent(videoId)}" allowfullscreen></iframe>`;
+                } else {
+                    throw new Error('Invalid YouTube URL. Please provide a valid YouTube link.');
+                }
+            } catch (error) {
+                errorMessage.textContent = error.message;
+            }
+        }
+    </script>
+</body>
+</html>
